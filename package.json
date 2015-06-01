@@ -1,5 +1,5 @@
 {
-  "name": "lendingClubAPI",
+  "name": "node-lending-club-api",
   "version": "1.0.0",
   "description": "NodeJS implementation of the Lending Club API",
   "main": "index.js",
