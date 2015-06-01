@@ -1,0 +1,23 @@
+{
+  "name": "lendingClubAPI",
+  "version": "1.0.0",
+  "description": "NodeJS implementation of the Lending Club API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bryansh/lendingClubAPI.git"
+  },
+  "author": "bryansh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bryansh/lendingClubAPI/issues"
+  },
+  "homepage": "https://github.com/bryansh/lendingClubAPI",
+  "dependencies": {
+    "request": "^2.55.0"
+  },
+  "devDependencies": {}
+}
