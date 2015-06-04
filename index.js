@@ -20,7 +20,7 @@ api.accounts = {
 
     GetRequest(PrepGetRequestOptions(api.accounts.accountsUrl + investorId + '/summary'), cb);
   },
-  getAvailableCash: function(investorId, cb) {
+  availableCash: function(investorId, cb) {
     SanitizeState(investorId);
 
     GetRequest(PrepGetRequestOptions(api.accounts.accountsUrl + investorId + '/availablecash'), cb);
