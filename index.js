@@ -106,6 +106,13 @@ api.accounts = {
       aid: investorId,
       orders: orders
     }), cb);
+  },
+  createOrderObject: function(loanId, requestedAmount, portfolioId) {
+    return {
+      loanId: loanId,
+      requestedAmount: requestedAmount,
+      portfolioId: portfolioId
+    };
   }
 };
 
