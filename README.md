@@ -26,6 +26,11 @@ After that you are good to go!
 
 #Available Exports
 
+## Loan Listing
+
+lc.loans.listing(showAll, cb)  
+https://www.lendingclub.com/developers/listed-loans.action
+
 ## Summary
 lc.accounts.summary(investorId, cb)  
 https://www.lendingclub.com/developers/summary.action

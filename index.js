@@ -117,10 +117,20 @@ api.accounts = {
 };
 
 api.loans = {
-  listing: function(cb) {
-    SanitizeState();
+  listing: function(showAll, cb) {
+    if (typeof(showAll) === 'function') {
+      cb = showAll;
+      showAll = null;
+    }
 
-   GetRequest(PrepGetRequestOptions('https://api.lendingclub.com/api/investor/' + api.version + '/loans/listing'), cb); 
+    var url = 'https://api.lendingclub.com/api/investor/' + api.version + '/loans/listing';
+
+    if (showAll) {
+      url += '?showAll=true'
+    }
+
+    SanitizeState();
+   GetRequest(PrepGetRequestOptions(url), cb); 
   }
 }
 
