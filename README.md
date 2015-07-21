@@ -46,7 +46,7 @@ lc.accounts.funds.add(investorId, amount, transferFrequency, startDate, endDate,
 lc.accounts.funds.transferFrequency.LOAD_NOW
 lc.accounts.funds.transferFrequency.LOAD_ONCE
 lc.accounts.funds.transferFrequency.LOAD_BIWEEKLY
-lc.accounts.funds.transferFrequency.LOAD_LOAD_ON_DAY_1_AND_16
+lc.accounts.funds.transferFrequency.LOAD_ON_DAY_1_AND_16
 lc.accounts.funds.transferFrequency.LOAD_MONTHLY
 ````
 https://www.lendingclub.com/developers/add-funds.action
