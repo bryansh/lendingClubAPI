@@ -142,7 +142,12 @@ function GetRequest(options, cb) {
       if (err) {
         cb(err);
       } else {
-        cb(null, JSON.parse(body));
+        try {
+          var data = JSON.parse(body);
+          cb(null, data); 
+        } catch (err) {
+          cb(err)
+        }
       }
     }
   });
@@ -157,6 +162,12 @@ function PostRequest(options, cb) {
         cb('non 200 statusCode: ' + res.statusCode + ', ' + res.body);
       } else {
         cb(null, JSON.parse(body));
+        try {
+          var data = JSON.parse(body);
+          cb(null, data); 
+        } catch (err) {
+          cb(err)
+        }
       }
     }
   });
