@@ -142,7 +142,11 @@ function GetRequest(options, cb) {
       if (err) {
         cb(err);
       } else {
-        cb(null, JSON.parse(body));
+        try {
+          cb(null, JSON.parse(body)); 
+        } catch (err) {
+          cb(err)
+        }
       }
     }
   });
@@ -156,7 +160,11 @@ function PostRequest(options, cb) {
       } else if (res.statusCode / 100 != 2) {
         cb('non 200 statusCode: ' + res.statusCode + ', ' + res.body);
       } else {
-        cb(null, JSON.parse(body));
+        try {
+          cb(null, JSON.parse(body));
+        } catch (err) {
+          cb(err)
+        }
       }
     }
   });
