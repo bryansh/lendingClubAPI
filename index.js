@@ -143,8 +143,7 @@ function GetRequest(options, cb) {
         cb(err);
       } else {
         try {
-          var data = JSON.parse(body);
-          cb(null, data); 
+          cb(null, JSON.parse(body)); 
         } catch (err) {
           cb(err)
         }
@@ -163,8 +162,7 @@ function PostRequest(options, cb) {
       } else {
         cb(null, JSON.parse(body));
         try {
-          var data = JSON.parse(body);
-          cb(null, data); 
+          cb(null, JSON.parse(body));
         } catch (err) {
           cb(err)
         }
