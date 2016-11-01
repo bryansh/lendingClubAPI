@@ -88,7 +88,7 @@ api.accounts = {
     SanitizeState(investorId, accountId, portfolioName);
 
     PostRequest(PrepPostRequestOptions(this.portfoliosUrl(investorId), {
-      aid: accountId,
+      actorId: accountId,
       portfolioName: portfolioName,
       portfolioDescription: portfolioDescription
     }), cb);
