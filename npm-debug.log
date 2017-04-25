@@ -1,0 +1,111 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/Users/bshort/.nvm/versions/node/v6.10.0/bin/node',
+1 verbose cli   '/Users/bshort/.nvm/versions/node/v6.10.0/bin/npm',
+1 verbose cli   'publish' ]
+2 info using npm@3.10.10
+3 info using node@v6.10.0
+4 verbose publish [ '.' ]
+5 silly cache add args [ '.', null ]
+6 verbose cache add spec .
+7 silly cache add parsed spec Result {
+7 silly cache add   raw: '.',
+7 silly cache add   scope: null,
+7 silly cache add   escapedName: null,
+7 silly cache add   name: null,
+7 silly cache add   rawSpec: '.',
+7 silly cache add   spec: '/Users/bshort/src/dev/lendingClubAPI',
+7 silly cache add   type: 'directory' }
+8 verbose addLocalDirectory /Users/bshort/.npm/node-lending-club-api/1.0.9/package.tgz not in flight; packing
+9 verbose correctMkdir /Users/bshort/.npm correctMkdir not in flight; initializing
+10 info lifecycle node-lending-club-api@1.0.9~prepublish: node-lending-club-api@1.0.9
+11 silly lifecycle node-lending-club-api@1.0.9~prepublish: no script for prepublish, continuing
+12 verbose tar pack [ '/Users/bshort/.npm/node-lending-club-api/1.0.9/package.tgz',
+12 verbose tar pack   '/Users/bshort/src/dev/lendingClubAPI' ]
+13 verbose tarball /Users/bshort/.npm/node-lending-club-api/1.0.9/package.tgz
+14 verbose folder /Users/bshort/src/dev/lendingClubAPI
+15 verbose addLocalTarball adding from inside cache /Users/bshort/.npm/node-lending-club-api/1.0.9/package.tgz
+16 verbose correctMkdir /Users/bshort/.npm correctMkdir not in flight; initializing
+17 silly cache afterAdd node-lending-club-api@1.0.9
+18 verbose afterAdd /Users/bshort/.npm/node-lending-club-api/1.0.9/package/package.json not in flight; writing
+19 verbose correctMkdir /Users/bshort/.npm correctMkdir not in flight; initializing
+20 verbose afterAdd /Users/bshort/.npm/node-lending-club-api/1.0.9/package/package.json written
+21 silly publish { name: 'node-lending-club-api',
+21 silly publish   version: '1.0.9',
+21 silly publish   description: 'NodeJS implementation of the Lending Club API',
+21 silly publish   main: 'index.js',
+21 silly publish   scripts: { test: 'echo "Error: no test specified" && exit 1' },
+21 silly publish   repository:
+21 silly publish    { type: 'git',
+21 silly publish      url: 'git+https://github.com/bryansh/lendingClubAPI.git' },
+21 silly publish   author: { name: 'bryansh' },
+21 silly publish   license: 'ISC',
+21 silly publish   bugs: { url: 'https://github.com/bryansh/lendingClubAPI/issues' },
+21 silly publish   keywords: [ 'lendingclub', 'lending', 'api' ],
+21 silly publish   homepage: 'https://github.com/bryansh/lendingClubAPI',
+21 silly publish   dependencies: { request: '^2.55.0' },
+21 silly publish   devDependencies: {},
+21 silly publish   readme: '# node-lending-club-api\nNodeJS implementation of the Lending Club API\n\n# Prerequisites\nYou\'ll need to get a Lending Club API key from  \nhttps://www.lendingclub.com/account/profile.action.\n\nYou\'ll also need to know your account number  (visible on your Account Summary page...big bold letters about "Available Cash").  Note: for simple scenarios, where one investor controls one account; I\'ve found that account number serves as investorId.  Your mileage may vary.  \nhttps://www.lendingclub.com/account/summary.action\n\n#Installation and Initialization\n\n````\nnpm install node-lending-club-api\n````\n\nThen in your Node APP\n\n````\nlet lc = require(\'node-lending-club-api\');\n\nlc.init({ apiKey: \'<insert your apikey here>\' });\n````\n\nAfter that you are good to go!\n\n#Available Exports\n\n## Loan Listing\n\nlc.loans.listing(showAll, cb)  \nhttps://www.lendingclub.com/developers/listed-loans.action\n\n## Summary\nlc.accounts.summary(investorId, cb)  \nhttps://www.lendingclub.com/developers/summary.action\n\n## Available Cash\nlc.accounts.availableCash(investorId, cb)  \nhttps://www.lendingclub.com/developers/available-cash.action\n\n## Add Funds\nlc.accounts.funds.add(investorId, amount, transferFrequency, startDate, endDate, estimatedFundsTransferStartDate, cb)  \n**note**: for the transfer frequency argument, the module does export an "enum":\n````\nlc.accounts.funds.transferFrequency.LOAD_NOW\nlc.accounts.funds.transferFrequency.LOAD_ONCE\nlc.accounts.funds.transferFrequency.LOAD_BIWEEKLY\nlc.accounts.funds.transferFrequency.LOAD_ON_DAY_1_AND_16\nlc.accounts.funds.transferFrequency.LOAD_MONTHLY\n````\nhttps://www.lendingclub.com/developers/add-funds.action\n\n## Withdrawal Funds\nlc.accounts.funds.withdrawal(investorId, amount, estimatedFundsTransferStartDate, cb)  \nhttps://www.lendingclub.com/developers/add-funds.action\n\n## Cancel Transfer\nlc.accounts.funds.cancel(investorId, transferIds, cb)  \n**Note: ** trasnferIds should be an array of transfer ids  \nhttps://www.lendingclub.com/developers/cancel-transfers.action\n\n## Notes Owned\nlc.accounts.notes(investorId, cb)  \nhttps://www.lendingclub.com/developers/notes-owned.action\n\n## Detailed Notes Owned\nlc.accounts.detailedNotes(investorId, cb)  \nhttps://www.lendingclub.com/developers/detailed-notes-owned.action\n\n## Portfolios Owned\nlc.accounts.portfolios(investorId, cb)  \nhttps://www.lendingclub.com/developers/portfolios-owned.action\n\n## Create Portfolio\nlc.accounts.createPortfolio(investorId, accountId, portfolioName, portfolioDescription, cb)  \nhttps://www.lendingclub.com/developers/create-portfolio.action\n\n## Submit Order\nlc.accounts.submitOrder(investorId, orders, cb)  \n**Note: ** To create objects for your orders array there is: lc.accounts.createOrderObject(loanId, requestedLoanAmount, portfolioId)  \nhttps://www.lendingclub.com/developers/submit-order.action\n\nThe signature of the callback is function(err, res) where err passed from the request module; and res is the object returned from the lending club api itself (and defined in the referenced pages).\n\n# Dependencies\n\n* Request module\n\n\n# TODO\n* Lending Club does mention a rate limit of 1 request per second; this api respect this restriction.  While I\'ve had no issues with collections of several calls.\n',
+21 silly publish   readmeFilename: 'README.md',
+21 silly publish   gitHead: 'da80449a068fe124bedd6b42294f9596b1eeb3a5',
+21 silly publish   _id: 'node-lending-club-api@1.0.9',
+21 silly publish   _shasum: '84623f8c92a44111214d74116fc0d1bb1ead99ef',
+21 silly publish   _from: '.' }
+22 verbose getPublishConfig undefined
+23 silly mapToRegistry name node-lending-club-api
+24 silly mapToRegistry using default registry
+25 silly mapToRegistry registry https://registry.npmjs.org/
+26 silly mapToRegistry data Result {
+26 silly mapToRegistry   raw: 'node-lending-club-api',
+26 silly mapToRegistry   scope: null,
+26 silly mapToRegistry   escapedName: 'node-lending-club-api',
+26 silly mapToRegistry   name: 'node-lending-club-api',
+26 silly mapToRegistry   rawSpec: '',
+26 silly mapToRegistry   spec: 'latest',
+26 silly mapToRegistry   type: 'tag' }
+27 silly mapToRegistry uri https://registry.npmjs.org/node-lending-club-api
+28 verbose publish registryBase https://registry.npmjs.org/
+29 silly publish uploading /Users/bshort/.npm/node-lending-club-api/1.0.9/package.tgz
+30 verbose request uri https://registry.npmjs.org/node-lending-club-api
+31 verbose request sending authorization for write operation
+32 info attempt registry request try #1 at 12:39:48 PM
+33 verbose request using bearer token for auth
+34 verbose request id 4adba2b4ce01864e
+35 http request PUT https://registry.npmjs.org/node-lending-club-api
+36 http 403 https://registry.npmjs.org/node-lending-club-api
+37 verbose headers { 'content-type': 'application/json',
+37 verbose headers   'cache-control': 'max-age=300',
+37 verbose headers   'content-length': '95',
+37 verbose headers   'accept-ranges': 'bytes',
+37 verbose headers   date: 'Tue, 25 Apr 2017 19:39:49 GMT',
+37 verbose headers   via: '1.1 varnish',
+37 verbose headers   connection: 'keep-alive',
+37 verbose headers   'x-served-by': 'cache-sea1041-SEA',
+37 verbose headers   'x-cache': 'MISS',
+37 verbose headers   'x-cache-hits': '0',
+37 verbose headers   'x-timer': 'S1493149189.198102,VS0,VE94',
+37 verbose headers   vary: 'Accept-Encoding' }
+38 verbose request invalidating /Users/bshort/.npm/registry.npmjs.org/node-lending-club-api on PUT
+39 error publish Failed PUT 403
+40 verbose stack Error: "You cannot publish over the previously published version 1.0.9." : node-lending-club-api
+40 verbose stack     at makeError (/Users/bshort/.nvm/versions/node/v6.10.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:302:12)
+40 verbose stack     at CachingRegistryClient.<anonymous> (/Users/bshort/.nvm/versions/node/v6.10.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:290:14)
+40 verbose stack     at Request._callback (/Users/bshort/.nvm/versions/node/v6.10.0/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:210:14)
+40 verbose stack     at Request.self.callback (/Users/bshort/.nvm/versions/node/v6.10.0/lib/node_modules/npm/node_modules/request/request.js:187:22)
+40 verbose stack     at emitTwo (events.js:106:13)
+40 verbose stack     at Request.emit (events.js:191:7)
+40 verbose stack     at Request.<anonymous> (/Users/bshort/.nvm/versions/node/v6.10.0/lib/node_modules/npm/node_modules/request/request.js:1048:10)
+40 verbose stack     at emitOne (events.js:96:13)
+40 verbose stack     at Request.emit (events.js:188:7)
+40 verbose stack     at IncomingMessage.<anonymous> (/Users/bshort/.nvm/versions/node/v6.10.0/lib/node_modules/npm/node_modules/request/request.js:969:12)
+41 verbose statusCode 403
+42 verbose pkgid node-lending-club-api
+43 verbose cwd /Users/bshort/src/dev/lendingClubAPI
+44 error Darwin 16.5.0
+45 error argv "/Users/bshort/.nvm/versions/node/v6.10.0/bin/node" "/Users/bshort/.nvm/versions/node/v6.10.0/bin/npm" "publish"
+46 error node v6.10.0
+47 error npm  v3.10.10
+48 error code E403
+49 error "You cannot publish over the previously published version 1.0.9." : node-lending-club-api
+50 error If you need help, you may report this error at:
+50 error     <https://github.com/npm/npm/issues>
+51 verbose exit [ 1, true ]
