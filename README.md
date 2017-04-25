@@ -24,7 +24,7 @@ lc.init({ apiKey: '<insert your apikey here>' });
 
 After that you are good to go!
 
-#Available Exports
+### Available Exports
 
 ## Loan Listing
 
