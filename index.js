@@ -1,8 +1,8 @@
-'use strict';
+/*jshint esversion: 6 */
 
-var request = require('request');
+const request = require('request');
 
-var api = {
+let api = {
   version: 'v1',
   init: function(options) {
     this.apiKey = options.apiKey;
@@ -17,12 +17,10 @@ api.accounts = {
   //gets
   summary: function(investorId, cb) {
     SanitizeState(investorId);
-
     GetRequest(PrepGetRequestOptions(api.accounts.accountsUrl + investorId + '/summary'), cb);
   },
   availableCash: function(investorId, cb) {
     SanitizeState(investorId);
-
     GetRequest(PrepGetRequestOptions(api.accounts.accountsUrl + investorId + '/availablecash'), cb);
   },
   funds: {
@@ -31,20 +29,18 @@ api.accounts = {
     },
     pending: function(investorId, cb) {
       SanitizeState(investorId);
-
       GetRequest(PrepGetRequestOptions(this.fundsUrl(investorId) + '/pending'), cb);
     },
     transferFrequency: {
       LOAD_NOW: 'LOAD_NOW',
       LOAD_ONCE: 'LOAD_ONCE',
-      LOAD_WEEKLY: 'LOAD_WEEKLY', 
+      LOAD_WEEKLY: 'LOAD_WEEKLY',
       LOAD_BIWEEKLY: 'LOAD_BIWEEKLY',
       LOAD_ON_DAY_1_AND_16: 'LOAD_ON_DAY_1_AND_16',
       LOAD_MONTHLY: 'LOAD_MONTHLY'
     },
     add: function(investorId, amount, transferFrequency, startDate, endDate, estimatedFundsTransferStartDate, cb) {
       SanitizeState(investorId, amount, estimatedFundsTransferStartDate);
-
       PostRequest(PrepPostRequestOptions(this.fundsUrl(investorId) + '/add', {
         transferFrequency: transferFrequency,
         amount: amount,
@@ -55,7 +51,6 @@ api.accounts = {
     },
     withdraw: function(investorId, amount, estimatedFundsTransferStartDate, cb) {
       SanitizeState(investorId, amount, estimatedFundsTransferStartDate);
-
       PostRequest(PrepPostRequestOptions(this.fundsUrl(investorId) + '/withdraw', {
         amount: amount,
         estimatedFundsTransferStartDate: estimatedFundsTransferStartDate
@@ -63,7 +58,6 @@ api.accounts = {
     },
     cancel: function(investorId, transferIds, cb) {
       SanitizeState(investorId, transferIds);
-
       PostRequest(PrepPostRequestOptions(this.fundsUrl(investorId) + '/cancel', {
         transferIds: transferIds
       }), cb);
@@ -71,22 +65,18 @@ api.accounts = {
   },
   notes: function(investorId, cb) {
     SanitizeState(investorId);
-
     GetRequest(PrepGetRequestOptions(api.accounts.accountsUrl + investorId + '/notes'), cb);
   },
   detailedNotes: function(investorId, cb) {
     SanitizeState(investorId);
-
     GetRequest(PrepGetRequestOptions(api.accounts.accountsUrl + investorId + '/detailednotes'), cb);
   },
   portfolios: function(investorId, cb) {
     SanitizeState(investorId);
-
     GetRequest(PrepGetRequestOptions(this.portfoliosUrl(investorId)), cb);
   },
   createPortfolio: function(investorId, accountId, portfolioName, portfolioDescription, cb) {
     SanitizeState(investorId, accountId, portfolioName);
-
     PostRequest(PrepPostRequestOptions(this.portfoliosUrl(investorId), {
       actorId: accountId,
       portfolioName: portfolioName,
@@ -101,7 +91,6 @@ api.accounts = {
   // }
   submitOrder: function(investorId, orders, cb) {
     SanitizeState(investorId, orders);
-
     PostRequest(PrepPostRequestOptions(api.accounts.accountsUrl + investorId + '/orders', {
       aid: investorId,
       orders: orders
@@ -123,16 +112,16 @@ api.loans = {
       showAll = null;
     }
 
-    var url = 'https://api.lendingclub.com/api/investor/' + api.version + '/loans/listing';
+    let url = 'https://api.lendingclub.com/api/investor/' + api.version + '/loans/listing';
 
     if (showAll) {
-      url += '?showAll=true'
+      url += '?showAll=true';
     }
 
     SanitizeState();
-   GetRequest(PrepGetRequestOptions(url), cb); 
+   GetRequest(PrepGetRequestOptions(url), cb);
   }
-}
+};
 
 module.exports = api;
 
@@ -143,9 +132,9 @@ function GetRequest(options, cb) {
         cb(err);
       } else {
         try {
-          cb(null, JSON.parse(body)); 
-        } catch (err) {
-          cb(err)
+          cb(null, JSON.parse(body));
+        } catch (ex) {
+          cb(ex);
         }
       }
     }
@@ -162,8 +151,8 @@ function PostRequest(options, cb) {
       } else {
         try {
           cb(null, JSON.parse(body));
-        } catch (err) {
-          cb(err)
+        } catch (ex) {
+          cb(ex);
         }
       }
     }
@@ -175,7 +164,7 @@ function SanitizeState() {
     throw 'lendingClubAPI is not initializd';
   }
 
-  for (var argumentIndex in arguments) {
+  for (let argumentIndex in arguments) {
     if (!arguments[argumentIndex] || (arguments[argumentIndex].hasOwnProperty('length') && arguments[argumentIndex].length === 0)) {
       console.log(arguments);
       throw 'invalid argument i=' + argumentIndex;

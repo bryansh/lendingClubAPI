@@ -3,7 +3,7 @@ NodeJS implementation of the Lending Club API
 
 # Prerequisites
 You'll need to get a Lending Club API key from  
-https://www.lendingclub.com/account/profile.action. 
+https://www.lendingclub.com/account/profile.action.
 
 You'll also need to know your account number  (visible on your Account Summary page...big bold letters about "Available Cash").  Note: for simple scenarios, where one investor controls one account; I've found that account number serves as investorId.  Your mileage may vary.  
 https://www.lendingclub.com/account/summary.action
@@ -17,7 +17,7 @@ npm install node-lending-club-api
 Then in your Node APP
 
 ````
-var lc = require('node-lending-club-api');
+let lc = require('node-lending-club-api');
 
 lc.init({ apiKey: '<insert your apikey here>' });
 ````
@@ -55,7 +55,7 @@ https://www.lendingclub.com/developers/add-funds.action
 lc.accounts.funds.withdrawal(investorId, amount, estimatedFundsTransferStartDate, cb)  
 https://www.lendingclub.com/developers/add-funds.action
 
-## Cancel Transfer 
+## Cancel Transfer
 lc.accounts.funds.cancel(investorId, transferIds, cb)  
 **Note: ** trasnferIds should be an array of transfer ids  
 https://www.lendingclub.com/developers/cancel-transfers.action
