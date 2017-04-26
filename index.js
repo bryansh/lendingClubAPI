@@ -1,6 +1,7 @@
 /*jshint esversion: 6 */
 
-const request = require('request');
+const limiter = require('simple-rate-limiter');
+const request = limiter(require('request')).to(1).per(1000);
 
 let api = {
   version: 'v1',
@@ -17,11 +18,11 @@ api.accounts = {
   //gets
   summary: function(investorId, cb) {
     SanitizeState(investorId);
-    GetRequest(PrepGetRequestOptions(api.accounts.accountsUrl + investorId + '/summary'), cb);
+    MakeRequest(PrepGetRequestOptions(api.accounts.accountsUrl + investorId + '/summary'), cb);
   },
   availableCash: function(investorId, cb) {
     SanitizeState(investorId);
-    GetRequest(PrepGetRequestOptions(api.accounts.accountsUrl + investorId + '/availablecash'), cb);
+    MakeRequest(PrepGetRequestOptions(api.accounts.accountsUrl + investorId + '/availablecash'), cb);
   },
   funds: {
     fundsUrl: function(investorId) {
@@ -29,7 +30,7 @@ api.accounts = {
     },
     pending: function(investorId, cb) {
       SanitizeState(investorId);
-      GetRequest(PrepGetRequestOptions(this.fundsUrl(investorId) + '/pending'), cb);
+      MakeRequest(PrepGetRequestOptions(this.fundsUrl(investorId) + '/pending'), cb);
     },
     transferFrequency: {
       LOAD_NOW: 'LOAD_NOW',
@@ -41,7 +42,7 @@ api.accounts = {
     },
     add: function(investorId, amount, transferFrequency, startDate, endDate, estimatedFundsTransferStartDate, cb) {
       SanitizeState(investorId, amount, estimatedFundsTransferStartDate);
-      PostRequest(PrepPostRequestOptions(this.fundsUrl(investorId) + '/add', {
+      MakeRequest(PrepPostRequestOptions(this.fundsUrl(investorId) + '/add', {
         transferFrequency: transferFrequency,
         amount: amount,
         startDate: startDate,
@@ -51,33 +52,33 @@ api.accounts = {
     },
     withdraw: function(investorId, amount, estimatedFundsTransferStartDate, cb) {
       SanitizeState(investorId, amount, estimatedFundsTransferStartDate);
-      PostRequest(PrepPostRequestOptions(this.fundsUrl(investorId) + '/withdraw', {
+      MakeRequest(PrepPostRequestOptions(this.fundsUrl(investorId) + '/withdraw', {
         amount: amount,
         estimatedFundsTransferStartDate: estimatedFundsTransferStartDate
       }), cb);
     },
     cancel: function(investorId, transferIds, cb) {
       SanitizeState(investorId, transferIds);
-      PostRequest(PrepPostRequestOptions(this.fundsUrl(investorId) + '/cancel', {
+      MakeRequest(PrepPostRequestOptions(this.fundsUrl(investorId) + '/cancel', {
         transferIds: transferIds
       }), cb);
     }
   },
   notes: function(investorId, cb) {
     SanitizeState(investorId);
-    GetRequest(PrepGetRequestOptions(api.accounts.accountsUrl + investorId + '/notes'), cb);
+    MakeRequest(PrepGetRequestOptions(api.accounts.accountsUrl + investorId + '/notes'), cb);
   },
   detailedNotes: function(investorId, cb) {
     SanitizeState(investorId);
-    GetRequest(PrepGetRequestOptions(api.accounts.accountsUrl + investorId + '/detailednotes'), cb);
+    MakeRequest(PrepGetRequestOptions(api.accounts.accountsUrl + investorId + '/detailednotes'), cb);
   },
   portfolios: function(investorId, cb) {
     SanitizeState(investorId);
-    GetRequest(PrepGetRequestOptions(this.portfoliosUrl(investorId)), cb);
+    MakeRequest(PrepGetRequestOptions(this.portfoliosUrl(investorId)), cb);
   },
   createPortfolio: function(investorId, accountId, portfolioName, portfolioDescription, cb) {
     SanitizeState(investorId, accountId, portfolioName);
-    PostRequest(PrepPostRequestOptions(this.portfoliosUrl(investorId), {
+    MakeRequest(PrepPostRequestOptions(this.portfoliosUrl(investorId), {
       actorId: accountId,
       portfolioName: portfolioName,
       portfolioDescription: portfolioDescription
@@ -91,7 +92,7 @@ api.accounts = {
   // }
   submitOrder: function(investorId, orders, cb) {
     SanitizeState(investorId, orders);
-    PostRequest(PrepPostRequestOptions(api.accounts.accountsUrl + investorId + '/orders', {
+    MakeRequest(PrepPostRequestOptions(api.accounts.accountsUrl + investorId + '/orders', {
       aid: investorId,
       orders: orders
     }), cb);
@@ -119,30 +120,14 @@ api.loans = {
     }
 
     SanitizeState();
-   GetRequest(PrepGetRequestOptions(url), cb);
+   MakeRequest(PrepGetRequestOptions(url), cb);
   }
 };
 
 module.exports = api;
 
-function GetRequest(options, cb) {
+function MakeRequest(options, cb) {
   request(options, function(err, res, body) {
-    if (cb) {
-      if (err) {
-        cb(err);
-      } else {
-        try {
-          cb(null, JSON.parse(body));
-        } catch (ex) {
-          cb(ex);
-        }
-      }
-    }
-  });
-}
-
-function PostRequest(options, cb) {
-  request.post(options, function(err, res, body) {
     if (cb) {
       if (err) {
         cb(err);
@@ -174,20 +159,22 @@ function SanitizeState() {
 
 function PrepPostRequestOptions(url, data) {
   return {
-    url: url,
-    body: JSON.stringify(data),
-    headers: {
+    'url': url,
+    'body': JSON.stringify(data),
+    'method': 'post',
+    'headers': {
       'Authorization': api.apiKey,
-      'content-type': 'application/json'
+      'content-type': 'application/json',
     }
   };
 }
 
 function PrepGetRequestOptions(url) {
   return {
-      url: url,
-      headers: {
+      'url': url,
+      'headers': {
         'Authorization': api.apiKey
-      }
+      },
+      'method': 'get'
     };
 }

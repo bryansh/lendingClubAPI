@@ -86,7 +86,4 @@ The signature of the callback is function(err, res) where err passed from the re
 # Dependencies
 
 * Request module
-
-
-# TODO
-* Lending Club does mention a rate limit of 1 request per second; this api respect this restriction.  While I've had no issues with collections of several calls.
+* simple-rate-limiter

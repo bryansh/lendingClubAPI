@@ -1,6 +1,6 @@
 {
   "name": "node-lending-club-api",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "NodeJS implementation of the Lending Club API",
   "main": "index.js",
   "scripts": {
@@ -15,10 +15,15 @@
   "bugs": {
     "url": "https://github.com/bryansh/lendingClubAPI/issues"
   },
-  "keywords": ["lendingclub", "lending", "api"],
+  "keywords": [
+    "lendingclub",
+    "lending",
+    "api"
+  ],
   "homepage": "https://github.com/bryansh/lendingClubAPI",
   "dependencies": {
-    "request": "^2.55.0"
+    "request": "^2.55.0",
+    "simple-rate-limiter": "^0.2.3"
   },
   "devDependencies": {}
 }
