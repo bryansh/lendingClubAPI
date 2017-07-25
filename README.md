@@ -81,6 +81,18 @@ lc.accounts.submitOrder(investorId, orders, cb)
 **Note: ** To create objects for your orders array there is: lc.accounts.createOrderObject(loanId, requestedLoanAmount, portfolioId)  
 https://www.lendingclub.com/developers/submit-order.action
 
+### FolioFN Endpoints
+
+## Sell
+lc.folio.sell(investorId, expireDate, notes, cb)
+https://www.lendingclub.com/foliofn/APIDocumentationSell.action
+
+## Buy
+lc.folio.buy(investorId, expireDate, notes, cb)
+https://www.lendingclub.com/foliofn/APIDocumentationBuy.action
+
+### Callback Signature
+
 The signature of the callback is function(err, res) where err passed from the request module; and res is the object returned from the lending club api itself (and defined in the referenced pages).
 
 # Dependencies

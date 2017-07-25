@@ -124,6 +124,33 @@ api.loans = {
   }
 };
 
+api.folio = {
+  // expireDate is expected to be a String formatted mm/dd/yyyy date of order expiration
+  // notes is expected to be an array of objects with the following schema:
+  // {
+  //    loanId: <loanId>,
+  //    orderId: <orderId>,
+  //    noteId: <nodeId>,
+  //    askingPrice: <askingPrice>,
+  // }
+  sell: function(investorId, expireDate, notes, cb) {
+    SanitizeState(investorId, expireDate, notes);
+    MakeRequest(PrepPostRequestOptions(api.accounts.accountsUrl + investorId + '/trades/sell', {
+      aid: investorId,
+      expireDate: expireDate,
+      notes: notes
+    }), cb);
+  },
+  buy: function(investorId, expireDate, notes, cb) {
+    SanitizeState(investorId, expireDate, notes);
+    MakeRequest(PrepPostRequestOptions(api.accounts.accountsUrl + investorId + '/trades/buy', {
+      aid: investorId,
+      expireDate: expireDate,
+      notes: notes
+    }), cb);
+  }
+};
+
 module.exports = api;
 
 function MakeRequest(options, cb) {
