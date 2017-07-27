@@ -1,6 +1,6 @@
 {
   "name": "node-lending-club-api",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "NodeJS implementation of the Lending Club API",
   "main": "index.js",
   "scripts": {
