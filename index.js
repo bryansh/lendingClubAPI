@@ -156,7 +156,7 @@ function MakeRequest (options, cb) {
     if (cb) {
       if (err) {
         cb(err)
-      } else if (res.statusCode / 100 === 2) {
+      } else if (res.statusCode / 100 !== 2) {
         cb(err, 'non 200 statusCode: ' + res.statusCode + ', ' + res.body)
       } else {
         try {
