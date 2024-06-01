@@ -1,5 +1,5 @@
-const limiter = require('simple-rate-limiter')
-const request = limiter(require('request')).to(1).per(1000)
+const fetch = require('node-fetch')
+const { Headers } = require('node-fetch')
 
 const api = {
   version: 'v1',
@@ -13,14 +13,17 @@ api.accounts = {
   portfoliosUrl: function (investorId) {
     return api.accounts.accountsUrl + investorId + '/portfolios'
   },
+  filtersUrl: function (investorId) {
+    return api.accounts.accountsUrl + investorId + '/filters'
+  },
   // gets
   summary: function (investorId, cb) {
     SanitizeState(investorId)
-    MakeRequest(PrepGetRequestOptions(api.accounts.accountsUrl + investorId + '/summary'), cb)
+    MakeRequest(api.accounts.accountsUrl + investorId + '/summary', PrepGetRequestOptions(), cb)
   },
   availableCash: function (investorId, cb) {
     SanitizeState(investorId)
-    MakeRequest(PrepGetRequestOptions(api.accounts.accountsUrl + investorId + '/availablecash'), cb)
+    MakeRequest(api.accounts.accountsUrl + investorId + '/availablecash', PrepGetRequestOptions(), cb)
   },
   funds: {
     fundsUrl: function (investorId) {
@@ -28,7 +31,7 @@ api.accounts = {
     },
     pending: function (investorId, cb) {
       SanitizeState(investorId)
-      MakeRequest(PrepGetRequestOptions(this.fundsUrl(investorId) + '/pending'), cb)
+      MakeRequest(this.fundsUrl(investorId) + '/pending', PrepGetRequestOptions(), cb)
     },
     transferFrequency: {
       LOAD_NOW: 'LOAD_NOW',
@@ -38,9 +41,10 @@ api.accounts = {
       LOAD_ON_DAY_1_AND_16: 'LOAD_ON_DAY_1_AND_16',
       LOAD_MONTHLY: 'LOAD_MONTHLY'
     },
+    // TODO
     add: function (investorId, amount, transferFrequency, startDate, endDate, estimatedFundsTransferStartDate, cb) {
       SanitizeState(investorId, amount, estimatedFundsTransferStartDate)
-      MakeRequest(PrepPostRequestOptions(this.fundsUrl(investorId) + '/add', {
+      MakeRequest(this.fundsUrl(investorId) + '/add', PrepPostRequestOptions({
         transferFrequency: transferFrequency,
         amount: amount,
         startDate: startDate,
@@ -48,6 +52,7 @@ api.accounts = {
         estimatedFundsTransferStartDate: estimatedFundsTransferStartDate
       }), cb)
     },
+    // TODO
     withdraw: function (investorId, amount, estimatedFundsTransferStartDate, cb) {
       SanitizeState(investorId, amount, estimatedFundsTransferStartDate)
       MakeRequest(PrepPostRequestOptions(this.fundsUrl(investorId) + '/withdraw', {
@@ -55,6 +60,7 @@ api.accounts = {
         estimatedFundsTransferStartDate: estimatedFundsTransferStartDate
       }), cb)
     },
+    // TOdO
     cancel: function (investorId, transferIds, cb) {
       SanitizeState(investorId, transferIds)
       MakeRequest(PrepPostRequestOptions(this.fundsUrl(investorId) + '/cancel', {
@@ -64,23 +70,27 @@ api.accounts = {
   },
   notes: function (investorId, cb) {
     SanitizeState(investorId)
-    MakeRequest(PrepGetRequestOptions(api.accounts.accountsUrl + investorId + '/notes'), cb)
+    MakeRequest(api.accounts.accountsUrl + investorId + '/notes', PrepGetRequestOptions(), cb)
   },
   detailedNotes: function (investorId, cb) {
     SanitizeState(investorId)
-    MakeRequest(PrepGetRequestOptions(api.accounts.accountsUrl + investorId + '/detailednotes'), cb)
+    MakeRequest(api.accounts.accountsUrl + investorId + '/detailednotes', PrepGetRequestOptions(), cb)
   },
   portfolios: function (investorId, cb) {
     SanitizeState(investorId)
-    MakeRequest(PrepGetRequestOptions(this.portfoliosUrl(investorId)), cb)
+    MakeRequest(this.portfoliosUrl(investorId), PrepGetRequestOptions(), cb)
   },
-  createPortfolio: function (investorId, accountId, portfolioName, portfolioDescription, cb) {
-    SanitizeState(investorId, accountId, portfolioName)
-    MakeRequest(PrepPostRequestOptions(this.portfoliosUrl(investorId), {
-      actorId: accountId,
+  createPortfolio: function (investorId, actorId, portfolioName, portfolioDescription, cb) {
+    SanitizeState(investorId, actorId, portfolioName)
+    MakeRequest(this.portfoliosUrl(investorId), PrepPostRequestOptions({
+      actorId: actorId,
       portfolioName: portfolioName,
       portfolioDescription: portfolioDescription
     }), cb)
+  },
+  filters: function (investorId, cb) {
+    SanitizeState(investorId)
+    MakeRequest(this.filtersUrl(investorId), PrepGetRequestOptions(), cb)
   },
   // orders is expected to be an array of objects with the following schema:
   // {
@@ -88,12 +98,15 @@ api.accounts = {
   //    requestedAmount: <requestedAmount>,
   //    portfolioId: <portfolioId>; nullable
   // }
+
+  // TODO
   submitOrder: function (investorId, orders, cb) {
     SanitizeState(investorId, orders)
-    MakeRequest(PrepPostRequestOptions(api.accounts.accountsUrl + investorId + '/orders', {
-      aid: investorId,
-      orders: orders
-    }), cb)
+    MakeRequest(api.accounts.accountsUrl + investorId + '/orders',
+      PrepPostRequestOptions({
+        aid: investorId,
+        orders: orders
+      }), cb)
   },
   createOrderObject: function (loanId, requestedAmount, portfolioId) {
     return {
@@ -118,7 +131,7 @@ api.loans = {
     }
 
     SanitizeState()
-    MakeRequest(PrepGetRequestOptions(url), cb)
+    MakeRequest(url, PrepGetRequestOptions(), cb)
   }
 }
 
@@ -151,21 +164,18 @@ api.folio = {
 
 module.exports = api
 
-function MakeRequest (options, cb) {
-  request(options, function (err, res, body) {
-    if (cb) {
-      if (err) {
-        cb(err)
-      } else if (res.statusCode / 100 !== 2) {
-        cb(err, 'non 200 statusCode: ' + res.statusCode + ', ' + res.body)
-      } else {
-        try {
-          cb(null, JSON.parse(body))
-        } catch (ex) {
-          cb(ex)
-        }
-      }
+function MakeRequest (url, options, cb) {
+  console.log(url, options)
+  fetch(url, options).then((res) => {
+    if (res.ok) {
+      return res.json()
+    } else {
+      throw new Error(res.statusText)
     }
+  }).then((res) => {
+    cb(res)
+  }).catch((err) => {
+    console.error(err)
   })
 }
 
@@ -182,24 +192,21 @@ function SanitizeState () {
   }
 }
 
-function PrepPostRequestOptions (url, data) {
+function PrepPostRequestOptions (data) {
   return {
-    url: url,
     body: JSON.stringify(data),
     method: 'post',
     headers: {
       Authorization: api.apiKey,
-      'content-type': 'application/json'
+      'Content-Type': 'application/json'
     }
   }
 }
 
-function PrepGetRequestOptions (url) {
+function PrepGetRequestOptions () {
   return {
-    url: url,
-    headers: {
+    headers: new Headers({
       Authorization: api.apiKey
-    },
-    method: 'get'
+    })
   }
 }

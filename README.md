@@ -33,7 +33,7 @@ https://www.lendingclub.com/developers/listed-loans.action
 
 ## Summary
 lc.accounts.summary(investorId, cb)  
-https://www.lendingclub.com/developers/summary.action
+https://www.lendingclub.com/developers/summary
 
 ## Available Cash
 lc.accounts.availableCash(investorId, cb)  

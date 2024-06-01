@@ -1,6 +1,6 @@
 {
   "name": "node-lending-club-api",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "NodeJS implementation of the Lending Club API",
   "main": "index.js",
   "scripts": {
@@ -22,8 +22,7 @@
   ],
   "homepage": "https://github.com/bryansh/lendingClubAPI",
   "dependencies": {
-    "request": "^2.55.0",
-    "simple-rate-limiter": "^0.2.3"
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {
     "eslint": "^7.16.0",
